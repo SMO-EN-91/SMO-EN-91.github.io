@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Add a geocoder</title>
+<title>Carte Eligibilit√© Essonne Num√©rique</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.css" rel="stylesheet" />
@@ -49,7 +49,7 @@
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML("B‚timent Èligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'ÈligibilitÈ :" + feature.properties.DateOuvertureEligibilite +'</p>'+"ad_hexaclÈ :" + feature.properties.ad_hexacle + '</p>' + "ad_batcode :" + feature.properties.ad_batcode + '</p>')
+    .setHTML("B√¢timent √©ligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'√©ligibilit√© :" + feature.properties.DateOuvertureEligibilite +'</p>'+"ad_hexacl√© :" + feature.properties.ad_hexacle + '</p>' + "ad_batcode :" + feature.properties.ad_batcode + '</p>')
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-commercialisables layer.
@@ -73,7 +73,7 @@ map.getCanvas().style.cursor = '';
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML("B‚timent Èligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclÈ : " + feature.properties.imb_id +'</p>' + "…tat : dÈployÈ ")
+    .setHTML("B√¢timent √©ligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexacl√© : " + feature.properties.imb_id +'</p>' + "√âtat : d√©ploy√© ")
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-arcep layer.
