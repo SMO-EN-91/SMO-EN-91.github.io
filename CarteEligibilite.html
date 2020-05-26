@@ -20,8 +20,7 @@
 <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-<div id="map"></div>
-<!--  <style>
+<style>
 .legend {
 background-color: #fff;
 border-radius: 3px;
@@ -46,18 +45,7 @@ margin-right: 5px;
 width: 10px;
 }
 </style>
- 
 <div id="map"></div>
- 
-<div id="jalons" class="legend">
-<h4>Jalons</h4>
-<div><span style="background-color: #060765"></span>JALON 1</div>
-<div><span style="background-color: #090c9f"></span>JALON 2</div>
-<div><span style="background-color: #0d11e7"></span>JALON 3</div>
-<div><span style="background-color: #6a6cf6"></span>JALON 4</div>
-<small>Source: <a href="#link to source">Essonne Numérique</a></small>
-</div>
--->
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYmFsbGVyZWF1IiwiYSI6ImNrOGZ5Z3M2MzA0dHAzZXBrcDQwbzN5YzIifQ.UpKvOA9C3E4M9bOoG7r1yg';
     var map = new mapboxgl.Map({
@@ -239,3 +227,14 @@ map.getCanvas().style.cursor = '';
 });
 });
 </script>
+	
+<div id="map"></div>
+ 
+<div id="jalons" class="legend">
+<h4></h4>
+<div><span style="background-color: #060765"></span>JALON 1</div>
+<div><span style="background-color: #090c9f"></span>JALON 2</div>
+<div><span style="background-color: #0d11e7"></span>JALON 3</div>
+<div><span style="background-color: #6a6cf6"></span>JALON 4</div>
+<small>Source: <a href="#link to source">Essonne Numérique</a></small>
+</div>
