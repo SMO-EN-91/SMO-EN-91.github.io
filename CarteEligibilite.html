@@ -73,7 +73,7 @@ width: 10px;
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML("Bâtiment éligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'éligibilité :" + feature.properties.DateOuvertureEligibilite +'</p>'+"ad_hexaclé :" + feature.properties.ad_hexacle + '</p>' + "ad_batcode :" + feature.properties.ad_batcode + '</p>'+ "Opérateurs disponibles :" + '<small><a href="orange.fr">ARIANE, COMCABLE, CORIOLIS, KNET, NORDNET, ORANGE, OZONE, SOSH et VITIS</a></small>')
+    .setHTML("Bâtiment éligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'éligibilité :" + feature.properties.DateOuvertureEligibilite +'</p>'+"ad_hexaclé :" + feature.properties.ad_hexacle + '</p>' + "ad_batcode :" + feature.properties.ad_batcode + '</p>'+ "Opérateurs disponibles :" + '<a href="https://boutique.orange.fr/eligibilite" target="_blank">ARIANE, COMCABLE, CORIOLIS, KNET, NORDNET, ORANGE, OZONE, SOSH et VITIS</a>'+", "+'<a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>')
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-commercialisables layer.
