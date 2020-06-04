@@ -96,7 +96,7 @@ width: 10px;
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML("Bâtiment éligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'éligibilité : " + feature.properties.DateOuvertureEligibilite +'</p>'+ " Statut du bâtiment : " + feature.properties.EtatImmeuble + '</p>'+ "ad_hexaclé : " + feature.properties.ad_hexacle + '</p>' + "ad_batcode : " + feature.properties.ad_batcode + '</p>'+ "Opérateurs disponibles : "+'<a href="https://www.ariane.network/" target="_blank">ARIANE</a>'+", "+'<a href="http://www.comcable.fr/" target="_blank">COMCABLE</a>'+", "+'<a href="https://www.coriolis.com/" target="_blank">CORIOLIS</a>'+", "+'<a href="https://www.k-net.fr/" target="_blank">K-NET</a>'+", "+'<a href="https://www.nordnet.com/" target="_blank">NORDNET</a>'+", "+ '<a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>'+", "+'<a href="https://www.ozone.net/" target="_blank">OZONE</a>'+", "+'<a href="https://www.sosh.fr/" target="_blank">SOSH</a>'+", "+'<a href="http://www.vitis.tv/" target="_blank">VITIS</a>')
+    .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ "Date d'ouverture d'éligibilité : " + feature.properties.DateOuvertureEligibilite +'</p>'+ " Statut du bâtiment : " + feature.properties.EtatImmeuble + '</p>'+ "ad_hexaclé : " + feature.properties.ad_hexacle + '</p>' + "ad_batcode : " + feature.properties.ad_batcode + '</p>'+ "Opérateurs disponibles : "+'<a href="https://www.ariane.network/" target="_blank">ARIANE</a>'+", "+'<a href="http://www.comcable.fr/" target="_blank">COMCABLE</a>'+", "+'<a href="https://www.coriolis.com/" target="_blank">CORIOLIS</a>'+", "+'<a href="https://www.k-net.fr/" target="_blank">K-NET</a>'+", "+'<a href="https://www.nordnet.com/" target="_blank">NORDNET</a>'+", "+ '<a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>'+", "+'<a href="https://www.ozone.net/" target="_blank">OZONE</a>'+", "+'<a href="https://www.sosh.fr/" target="_blank">SOSH</a>'+", "+'<a href="http://www.vitis.tv/" target="_blank">VITIS</a>')
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-commercialisables layer.
@@ -120,7 +120,7 @@ map.getCanvas().style.cursor = '';
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML("Bâtiment éligible : " +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclé : " + feature.properties.imb_id +'</p>' + "État : " + feature.properties.imb_etat)
+    .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclé : " + feature.properties.imb_id +'</p>' + "État : " + feature.properties.imb_etat)
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-arcep layer.
@@ -257,12 +257,11 @@ Date des ouvertures commerciales
 <div><span style="background-color: #090c9f"></span>entre juillet et décembre 2020</div>
 <div><span style="background-color: #0d11e7"></span>entre novembre 2020 et avril 2021</div>
 <div><span style="background-color: #6a6cf6"></span>entre mars et septembre 2021</div>
-<small>Source: <a href="#link to source">Essonne Numérique</a></small>
+<small>Source: <a href="http://essonnenumerique.com/"target="_blank">Essonne Numérique</a></small>
 </div>
-
+ 
 <div id="prises-commercialisables" class="legend2">
 Déploiement des bâtiments
 <div><span style="background-color: #0CF422"></span>éligible</div>
 <div><span style="background-color: #F79C0B"></span>en cours de déploiement</div>
-<small>Source: <a href="#link to source">Essonne Numérique & ARCEP</a></small>
 </div>
