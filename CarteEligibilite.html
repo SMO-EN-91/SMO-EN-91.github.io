@@ -146,9 +146,6 @@ map.addSource('Jalon4', {
 // location of the click, with description HTML from its properties.
 map.on('click', 'Jalon4', function(e) {
 new mapboxgl.Popup()
-.mapboxgl-popup-anchor-left {
-    margin-left: 10px;
-}
 .setLngLat(e.lngLat)
 .setHTML('<strong>Jalon 4</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code +'</p>' + "Date d'ouverture commerciale : " + e.features[0].properties.DATE_OUVERTURE)
 .addTo(map);
