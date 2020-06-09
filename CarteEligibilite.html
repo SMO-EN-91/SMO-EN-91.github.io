@@ -99,38 +99,7 @@ width: 10px;
     .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ " Statut du bâtiment : " + feature.properties.EtatImmeuble + '</p>'+ "ad_hexaclé : " + feature.properties.ad_hexacle + '</p>' + "ad_batcode : " + feature.properties.ad_batcode + '</p>'+ "Opérateurs disponibles : "+'<a href="https://www.ariane.network/" target="_blank">ARIANE</a>'+", "+'<a href="http://www.comcable.fr/" target="_blank">COMCABLE</a>'+", "+'<a href="https://www.coriolis.com/" target="_blank">CORIOLIS</a>'+", "+'<a href="https://www.k-net.fr/" target="_blank">K-NET</a>'+", "+'<a href="https://www.nordnet.com/" target="_blank">NORDNET</a>'+", "+ '<a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>'+", "+'<a href="https://www.ozone.net/" target="_blank">OZONE</a>'+", "+'<a href="https://www.sosh.fr/" target="_blank">SOSH</a>'+", "+'<a href="http://www.vitis.tv/" target="_blank">VITIS</a>')
     .addTo(map);
 });
-// Change the cursor to a pointer when the mouse is over the prises-commercialisables layer.
-map.on('mouseenter', 'prises-commercialisables', function() {
-map.getCanvas().style.cursor = 'pointer';
-});
-// Change it back to a pointer when it leaves.
-map.on('mouseleave', 'prises-commercialisables', function() {
-map.getCanvas().style.cursor = '';
-});
 
-    map.on('click', function(e) {
-  var features = map.queryRenderedFeatures(e.point, {
-    layers: ['prises-arcep'] // replace this with the name of the layer
-  });
-  if (!features.length) {
-    return;
-  }
-  var feature = features[0];
-  var popup = new mapboxgl.Popup({
-      offset: [0, -15]
-    })
-    .setLngLat(feature.geometry.coordinates)
-    .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclé : " + feature.properties.imb_id +'</p>' + "État : " + feature.properties.imb_etat)
-    .addTo(map);
-});
-// Change the cursor to a pointer when the mouse is over the prises-arcep layer.
-map.on('mouseenter', 'prises-arcep', function() {
-map.getCanvas().style.cursor = 'pointer';
-});
-// Change it back to a pointer when it leaves.
-map.on('mouseleave', 'prises-arcep', function() {
-map.getCanvas().style.cursor = '';
-});
 
 
 map.on('load', function() {
