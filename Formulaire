@@ -4,31 +4,31 @@
        <legend><strong>VOUS AVEZ DES QUESTIONS ? LAISSEZ UN COMMENTAIRE</strong></legend> <!-- Titre du fieldset --> 
 
        <p>
-       <label for="nom"><strong>NOM</strong> (obligatoire) </label>
+       <label for="Nom"><strong>NOM</strong> (obligatoire) </label>
        <p>
        <input type="text" name="nom" id="nom" required />
        </p>
 
        <p>
-       <label for="prenom"><strong>PRÉNOM</strong> (obligatoire) </label>
+       <label for="Prénom"><strong>PRÉNOM</strong> (obligatoire) </label>
        <p>
        <input type="text" name="prenom" id="prenom" required />
        </p>
  
        <p>
-       <label for="adresse"><strong>ADRESSE</strong> (obligatoire) </label>
+       <label for="Adresse"><strong>ADRESSE</strong> (obligatoire) </label>
        <p>
        <input type="text" name="adresse" id="adresse" required />
        </p>
 
        <p>
-       <label for="codepostal"><strong>CODE POSTAL</strong> (obligatoire) </label>
+       <label for="Code Postal"><strong>CODE POSTAL</strong> (obligatoire) </label>
        <p>
        <input type="text" name="codepostal" id="codepostal" required />
        </p>
 
        <p>
-       <label for="ville"><strong>VILLE</strong> (obligatoire) </label>
+       <label for="Ville"><strong>VILLE</strong> (obligatoire) </label>
        <p>
        <input type="text" name="ville" id="ville" required />
        </p>
@@ -40,13 +40,13 @@
        </p>
 
        <p>
-       <label for="telephone"><strong>TÉLÉPHONE</strong> (obligatoire) </label>
+       <label for="Téléphone"><strong>TÉLÉPHONE</strong> (obligatoire) </label>
        <p>
        <input type="text" name="telephone" id="telephone" required />
        </p>
 
        <p>
-       <label for="msg"><strong>COMMENTAIRES</strong> (obligatoire)</label>
+       <label for="Commentaires"><strong>COMMENTAIRES</strong> (obligatoire)</label>
        <p>
        <textarea name="msg" id="commentaires" cols="40" rows="4"></textarea>
        </p>
