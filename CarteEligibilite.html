@@ -231,7 +231,7 @@ map.addSource('1jalon', {
  
 // When a click event occurs on a feature in the JALON layer, open a popup at the
 // location of the click, with description HTML from its properties.
-map.on('click', '1jalon', function(e) {
+map.on('click', 'jalon1', function(e) {
 new mapboxgl.Popup()
 .setLngLat(e.lngLat)
 .setHTML('<strong>Jalon 1</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code +'</p>' + "Date d'ouverture commerciale : " + e.features[0].properties.DATE_OUVERTURE)
@@ -239,12 +239,12 @@ new mapboxgl.Popup()
 });
  
 // Change the cursor to a pointer when the mouse is over the JALON layer.
-map.on('mouseenter', '1jalon', function() {
+map.on('mouseenter', 'jalon1', function() {
 map.getCanvas().style.cursor = 'pointer';
 });
  
 // Change it back to a pointer when it leaves.
-map.on('mouseleave', '1jalon', function() {
+map.on('mouseleave', 'jalon1', function() {
 map.getCanvas().style.cursor = '';
 });
 });
