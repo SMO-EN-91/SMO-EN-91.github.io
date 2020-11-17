@@ -37,17 +37,28 @@
     <form method="" action="javascript:sendMail()">
     <table border="0" cellspacing="1" width="400">
         <tr>
-            <td width="98">Destinataire</td>
+            <td width="98">Votre email</td>
             <td width="295">
                 <input type="text" id="edTo" size="39"></td>
         </tr>
         <tr>
-            <td width="98">Sujet</td>
+            <td width="98">L'objet de votre demande : </td>
             <td width="295">
-                <input type="text" id="edSubject" size="39"></td>
+                <input type="text" id="edSubject" size="39">
+            	<select id="edSubject">
+                <option selected="selected">blanc</option>
+                <option>jaune</option>
+                <option>orange</option>
+                <option>rouge</option>
+                <option>vert</option>
+                <option>bleu</option>
+                <option>violet</option>
+                <option>Autre</option>
+                </select>
+           </td>
         </tr>
         <tr>
-            <label>Votre commune : </label>
+            <td width="98">Votre commune :</td>
             <select id="commune">
             <option selected="selected">Abbéville-la-Rivière</option>
             <option>Angerville</option>
