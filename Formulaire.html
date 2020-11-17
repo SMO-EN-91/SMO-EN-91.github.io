@@ -1,16 +1,23 @@
 <html>
 
+<head>
+    <meta charset="utf-8">
+    <title>Contact</title>
+</head>
+
+<body>
 <br>
    
 <label>L'objet de votre demande : </label>
 <select name="objet">
-<option selected="selected">Mon adresse est erronée (erreur de numéro de voie, erreur de type de voie)</option>
-<option>Mon adresse est introuvable</option>
-<option>Est-ce que mon logement est éligible à la fibre optique ?</option>
-<option>Quels sont les opérateurs disponibles ?</option>
-<option>Mon voisin est éligible mais pas moi, pourquoi ?</option>
-<option>Le fourreau de mon raccordement est bouché, que faire ?</option>
-<option>Le technicien a constaté une erreur de route optique, que faire ?</option>
+<option selected="selected">blanc</option>
+<option>jaune</option>
+<option>orange</option>
+<option>rouge</option>
+<option>vert</option>
+<option>bleu</option>
+<option>violet</option>
+<option>Autre</option>
 </select>
 
 <br>
@@ -238,4 +245,22 @@
 <input type="submit" />
 
 </form>
+       
+    <?php
+    if (isset($_POST['message'])) {
+        $position_arobase = strpos($_POST['email'], '@');
+        if ($position_arobase === false)
+            echo '<p>Votre email doit comporter un arobase.</p>';
+        else {
+            $retour = mail('mballereau@cd-essonne.fr', 'Envoi depuis la page Contact', $_POST['message'], 'From: ' . $_POST['email']);
+            if($retour)
+                echo '<p>Votre message a été envoyé.</p>';
+            else
+                echo '<p>Erreur.</p>';
+        }
+    }
+    ?>
+   
+</body>
+</html>
 
