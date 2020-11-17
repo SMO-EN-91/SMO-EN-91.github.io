@@ -4,27 +4,7 @@
     <meta charset="utf-8">
     <title>Contact</title>
     
-    <script language="Javascript" type="text/javascript">
-    function sendMail() {
-        <!--Tester les donnees-->
-        if (document.getElementById("objet").value.length==0) {
-            alert("Saisir le titre !!!");
-            return;
-        }
-        if (document.getElementById("message").value.length==0) {
-            alert("Ecrire le message !!!");
-            return;
-        }
-        <!--Encoder l'url mailto-->
-        var url="mailto:essonnenumerique@cd-essonne.fr
-            +"?subject="+encodeURIComponent(document.getElementById("objet").value)
-            +"&body="+encodeURIComponent(document.getElementById("message").value);
-        <!--Ouvrir client messagerie-->
-        document.location=url;
-    }
- 
-</script>
-    
+
 </head>
 
 <body>
