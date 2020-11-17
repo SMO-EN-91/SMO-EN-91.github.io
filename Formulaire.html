@@ -3,11 +3,35 @@
 <head>
     <meta charset="utf-8">
     <title>Contact</title>
+    
+    <script language="Javascript" type="text/javascript">
+    function sendMail() {
+        <!--Tester les donnees-->
+        if (document.getElementById("objet").value.length==0) {
+            alert("Saisir le titre !!!");
+            return;
+        }
+        if (document.getElementById("message").value.length==0) {
+            alert("Ecrire le message !!!");
+            return;
+        }
+        <!--Encoder l'url mailto-->
+        var url="mailto:essonnenumerique@cd-essonne.fr
+            +"?subject="+encodeURIComponent(document.getElementById("objet").value)
+            +"&body="+encodeURIComponent(document.getElementById("message").value);
+        <!--Ouvrir client messagerie-->
+        document.location=url;
+    }
+ 
+</script>
+    
 </head>
 
 <body>
 <br>
-   
+    
+<form method="" action="javascript:sendMail()">
+    
 <label>L'objet de votre demande : </label>
 <select name="objet">
 <option selected="selected">blanc</option>
@@ -28,7 +52,7 @@
 
 <br>
       
-<form method="post"><label>Email</label>
+<label>Email</label>
 <input name="email" required="" type="email" />
    
 <br>
@@ -246,20 +270,5 @@
 
 </form>
        
-    <?php
-    if (isset($_POST['message'])) {
-        $position_arobase = strpos($_POST['email'], '@');
-        if ($position_arobase === false)
-            echo '<p>Votre email doit comporter un arobase.</p>';
-        else {
-            $retour = mail('mballereau@cd-essonne.fr', 'Envoi depuis la page Contact', $_POST['message'], 'From: ' . $_POST['email']);
-            if($retour)
-                echo '<p>Votre message a été envoyé.</p>';
-            else
-                echo '<p>Erreur.</p>';
-        }
-    }
-    ?>
-   
 </body>
 </html>
