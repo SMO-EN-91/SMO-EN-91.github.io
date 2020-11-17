@@ -1,5 +1,7 @@
 <html>
 
+<br>
+   
 <label>L'objet de votre demande : </label>
 <select name="objet">
 <option selected="selected">blanc</option>
@@ -12,12 +14,19 @@
 <option>Autre</option>
 </select>
 
+<br>
+   
 <label>Les éléments d'information présent dans la FAQ ne répondent pas à ma demande : </label>
 <input name="FAQ" type="radio" value="Oui" /> Oui
 <input name="FAQ" type="radio" value="Non" /> Non
 
+<br>
+      
 <form method="post"><label>Email</label>
 <input name="email" required="" type="email" /><label>Votre commune : </label>
+
+<br>
+   
 <select name="commune">
 <option selected="selected">blanc</option>
 <option>jaune</option>
@@ -29,13 +38,16 @@
 <option>noir</option>
 </select>
 
+<br>
+   
 <label>Votre adresse : </label>
 <textarea name="adresse" required=""></textarea>
 
+<br>
+   
 <label>Message</label>
 <textarea name="message" required=""></textarea>
 <input type="submit" />
 
 </form>
-   
-</form>
+
