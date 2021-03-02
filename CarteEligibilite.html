@@ -120,7 +120,7 @@ map.getCanvas().style.cursor = '';
       offset: [0, -15]
     })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclé : " + feature.properties.imb_id +'</p>' + "État : " + feature.properties.imb_etat +'</p>' + "Opérateurs d'infrastructures : " + feature.properties.op_infra)
+    .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>' + "ad_hexaclé : " + feature.properties.imb_id +'</p>' + "État : " + feature.properties.imb_etat )
     .addTo(map);
 });
 // Change the cursor to a pointer when the mouse is over the prises-arcep layer.
