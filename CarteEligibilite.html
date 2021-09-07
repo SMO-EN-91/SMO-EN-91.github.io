@@ -147,7 +147,7 @@ map.addSource('4jalon', {
 map.on('click', '4jalon', function(e) {
 new mapboxgl.Popup()
 .setLngLat(e.lngLat)
-.setHTML('<strong>Jalon 4</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code +'</p>' + "Date d'ouverture commerciale : " + e.features[0].properties.DATE_OUVERTURE)
+.setHTML('<strong>Jalon 4</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code)
 .addTo(map);
 });
  
@@ -176,7 +176,7 @@ map.addSource('3jalon', {
 map.on('click', '3jalon', function(e) {
 new mapboxgl.Popup()
 .setLngLat(e.lngLat)
-.setHTML('<strong>Jalon 3</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code +'</p>' + "Date d'ouverture commerciale : " + e.features[0].properties.DATE_OUVERTURE)
+.setHTML('<strong>Jalon 3</strong>' +'</p>'+ "Nom de la zone : " + e.features[0].properties.zs_r3_code)
 .addTo(map);
 });
  
