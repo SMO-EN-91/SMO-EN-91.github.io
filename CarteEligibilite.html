@@ -8,7 +8,8 @@
 <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-	.legend {
+
+	.legend2 {
 background-color: #fff;
 border-radius: 3px;
 bottom: 30px;
@@ -20,18 +21,17 @@ right: 10px;
 z-index: 10;
 }
  
-.legend h4 {
+.legend2 h4 {
 margin: 0 0 10px;
 }
  
-.legend div span {
+.legend2 div span {
 border-radius: 50%;
 display: inline-block;
 height: 10px;
 margin-right: 5px;
-width: 30px;
+width: 10px;
 }
-	
 </style>
 </head>
 <body>
@@ -228,7 +228,7 @@ map.getCanvas().style.cursor = '';
 });
 </script>
 	
-<div id="prises-commercialisables" class="legend">
+<div id="prises-commercialisables" class="legend2">
 Déploiement des bâtiments
 <div><span style="background-color: #2ac537"></span>éligible</div>
 <div><span style="background-color: #F79C0B"></span>en cours de déploiement</div>
