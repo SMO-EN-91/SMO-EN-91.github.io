@@ -163,33 +163,10 @@
       var feature = e.features[0];
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
-       .setHTML(`
-  <strong>Informations sur le bâtiment :</strong>
-  <p>${feature.properties.Voie}</p>
-  <p>${feature.properties.Commune}</p>
-  <p>Statut du bâtiment : ${feature.properties.EtatImmeuble}</p>
-  <p>ad_batcode : ${feature.properties.ad_batcode}</p>
-  <p>ad_hexaclé : ${feature.properties.ad_hexacle}</p>
-  <p>Nom de la zone : ${feature.properties.SRO}</p>
-  <p>Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}</p>
-  <p>PBO référencé(s) : ${feature.properties.PBO_REF}</p>
-  <p>Opérateurs disponibles :
-    <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>,
-    <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>,
-    <a href="https://www.free.fr/freebox/carte-fibre-optique/" target="_blank">FREE</a>,
-    <a href="https://www.k-net.fr/" target="_blank">K-NET</a>,
-    <a href="https://www.nordnet.com/" target="_blank">NORDNET</a>,
-    <a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>,
-    <a href="https://www.ozone.net/" target="_blank">OZONE</a>,
-    <a href="https://www.sfr.fr/" target="_blank">SFR</a>
-  </p>
-  <p>
-    Plus d'infos sur les 
-    <a href="http://essonnenumerique.com/suis-je-eligible/operateurs-disponibles-2/" target="_blank">opérateurs disponibles</a>
-  </p>
-`)
-        .addTo(map);
-    });
+          .setHTML('<strong>Informations sur le bâtiment : </strong>' +'</p>' + feature.properties.Voie +'</p>'+feature.properties.Commune +'</p>'+ " Statut du bâtiment : " + feature.properties.EtatImmeuble + '</p>'+ "ad_batcode : " + feature.properties.ad_batcode + '</p>'+ "ad_hexaclé : " + feature.properties.ad_hexacle + '</p>' + "Nom de la zone : " + feature.properties.SRO + '</p>' + "Nombre de fibres attribuées : " + feature.properties.NbreFibresAttribuees + '</p>' + "PBO référencé(s) : " + feature.properties.PBO_REF + '</p>' + "Opérateurs disponibles : " +'<a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>'+", " +'<a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>'+", " +'<a href="https://www.free.fr/freebox/carte-fibre-optique/" target="_blank">FREE</a>'+", "+'<a href="https://www.k-net.fr/" target="_blank">K-NET</a>'+", "+'<a href="https://www.nordnet.com/" target="_blank">NORDNET</a>'+", "+ '<a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>'+", "+'<a href="https://www.ozone.net/" target="_blank">OZONE</a>'+", "+'<a href="https://www.sfr.fr/" target="_blank">SFR</a>'+ '</p>' + "Plus d'informations sur les " +'<a href="http://essonnenumerique.com/suis-je-eligible/operateurs-disponibles-2/" target="_blank">opérateurs disponibles</a>')
+    .addTo(map);
+});
+
 
     map.on('mouseenter', 'prises-commercialisables', function() {
       map.getCanvas().style.cursor = 'pointer';
@@ -249,6 +226,7 @@
 </div>
 </body>
 </html>
+
 
 
 
