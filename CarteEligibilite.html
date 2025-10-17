@@ -127,28 +127,6 @@
       });
     }
 
-    // Idem pour les jalons (exemple pour 4jalon)
-    if (!map.getSource('4jalon')) {
-      map.addSource('4jalon', {
-        type: 'geojson',
-        data: 'https://tonurlversgeojson/4jalon.geojson' // ou url de ta source
-      });
-    }
-    if (!map.getLayer('4jalon')) {
-      map.addLayer({
-        id: '4jalon',
-        type: 'fill',
-        source: '4jalon',
-        paint: {
-          'fill-color': '#888',
-          'fill-opacity': 0.4
-        }
-      });
-    }
-
-    // Répéter pour 3jalon, 2jalon, jalon1 etc.
-
-  }
 
   // Ré-ajoute les sources et couches après chaque changement de style
   map.on('styledata', function() {
@@ -246,6 +224,7 @@
 </div>
 </body>
 </html>
+
 
 
 
