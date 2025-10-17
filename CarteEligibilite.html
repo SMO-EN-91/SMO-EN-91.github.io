@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta charset="utf-8" />
+<meta charset="utf-16" />
 <title>Carte Eligibilité Essonne Numérique</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
@@ -94,8 +94,8 @@
           'circle-color': [
             'match',
             ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
-            'eligible', '#2ac537',
-            'non-eligible', '#F79C0B',
+            'ELIGIBLE', '#2ac537',
+            'NON ELIGIBLE', '#F79C0B',
             '#ccc'
           ]
         }
@@ -118,8 +118,8 @@
           'circle-color': [
             'match',
             ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
-            'eligible', '#2ac537',
-            'non-eligible', '#F79C0B',
+            'ELIGIBLE', '#2ac537',
+            'NON ELIGIBLE', '#F79C0B',
             '#ccc'
           ]
         }
@@ -245,5 +245,6 @@
 </div>
 </body>
 </html>
+
 
 
