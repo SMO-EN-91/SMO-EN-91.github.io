@@ -179,11 +179,11 @@
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
-          `<strong>Informations sur le bâtiment :</strong><br>
-          ${feature.properties.Voie}<br>
-          ${feature.properties.Commune}<br>
-          ad_hexaclé : ${feature.properties.imb_id}<br>
-          État : ${feature.properties.imb_etat}<br>
+          `<strong>Informations sur le bâtiment :</strong><br></p>
+          ${feature.properties.Voie}<br></p>
+          ${feature.properties.Commune}<br></p>
+          ad_hexaclé : ${feature.properties.imb_id}<br></p>
+          État : ${feature.properties.imb_etat}<br></p>
           Opérateurs d'infrastructures : ${feature.properties.op_infra}`
         )
         .addTo(map);
@@ -195,22 +195,6 @@
     map.on('mouseleave', 'prises-arcep', function() {
       map.getCanvas().style.cursor = '';
     });
-
-    // Exemple popup pour jalons (à adapter pour chaque couche jalon)
-    ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(function(layer) {
-      map.on('click', layer, function(e) {
-        var prop = e.features[0].properties;
-        var html = `<strong>${layer.toUpperCase()}</strong><br>Nom de la zone : ${prop.zs_r3_code || ''}`;
-        if (prop.DATE_OUVERTURE) html += `<br>Date d'ouverture commerciale : ${prop.DATE_OUVERTURE}`;
-        new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
-      });
-
-      map.on('mouseenter', layer, function() {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', layer, function() {
-        map.getCanvas().style.cursor = '';
-      });
     });
 
   });
@@ -224,6 +208,7 @@
 </div>
 </body>
 </html>
+
 
 
 
