@@ -63,6 +63,12 @@ width: 10px;
         center: [2.306518, 48.523618],
         zoom: 9.5
     });
+
+	var styleSelect = document.getElementById('style-select');
+
+styleSelect.addEventListener('change', function() {
+  map.setStyle(this.value);
+});
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -243,4 +249,5 @@ Déploiement des bâtiments
 <div><span style="background-color: #F79C0B"></span>non éligible</div>
 <small>Source: <a href="http://essonnenumerique.com/"target="_blank">Essonne Numérique</a></small>
 </div>
+
 
