@@ -116,7 +116,13 @@
         'source-layer': 'Prises_arcep-apqk9x', // à adapter
         paint: {
           'circle-radius': 5,
-          'circle-color': '#FF0000' // par exemple rouge, tu peux adapter
+          'circle-color': [
+            'match',
+            ['get', 'statut'], // par exemple, un champ qui indique éligible ou non
+            'eligible', '#2ac537',
+            'non-eligible', '#F79C0B',
+            '#ccc'
+          ]
         }
       });
     }
@@ -240,4 +246,5 @@
 </div>
 </body>
 </html>
+
 
