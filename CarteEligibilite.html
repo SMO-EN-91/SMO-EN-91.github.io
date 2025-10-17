@@ -164,15 +164,15 @@
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
-          `<strong>Informations sur le bâtiment :</strong><br>
-          ${feature.properties.Voie}<br>
-          ${feature.properties.Commune}<br>
-          Statut du bâtiment : ${feature.properties.EtatImmeuble}<br>
-          ad_batcode : ${feature.properties.ad_batcode}<br>
-          ad_hexaclé : ${feature.properties.ad_hexacle}<br>
-          Nom de la zone : ${feature.properties.SRO}<br>
-          Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}<br>
-          PBO référencé(s) : ${feature.properties.PBO_REF}<br>
+          `<strong>Informations sur le bâtiment :</strong><br></p>
+          ${feature.properties.Voie}<br></p>
+          ${feature.properties.Commune}<br></p>
+          Statut du bâtiment : ${feature.properties.EtatImmeuble}<br></p>
+          ad_batcode : ${feature.properties.ad_batcode}<br></p>
+          ad_hexaclé : ${feature.properties.ad_hexacle}<br></p>
+          Nom de la zone : ${feature.properties.SRO}<br></p>
+          Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}<br></p>
+          PBO référencé(s) : ${feature.properties.PBO_REF}<br></p>
           Opérateurs disponibles : 
           <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>, 
           <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>, 
@@ -181,7 +181,7 @@
           <a href="https://www.nordnet.com/" target="_blank">NORDNET</a>, 
           <a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>, 
           <a href="https://www.ozone.net/" target="_blank">OZONE</a>, 
-          <a href="https://www.sfr.fr/" target="_blank">SFR</a><br>
+          <a href="https://www.sfr.fr/" target="_blank">SFR</a><br></p>
           Plus d'infos sur les <a href="http://essonnenumerique.com/suis-je-eligible/operateurs-disponibles-2/" target="_blank">opérateurs disponibles</a>`
         )
         .addTo(map);
@@ -200,11 +200,11 @@
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
-          `<strong>Informations sur le bâtiment :</strong><br>
-          ${feature.properties.Voie}<br>
-          ${feature.properties.Commune}<br>
-          ad_hexaclé : ${feature.properties.imb_id}<br>
-          État : ${feature.properties.imb_etat}<br>
+          `<strong>Informations sur le bâtiment :</strong><br></p>
+          ${feature.properties.Voie}<br></p>
+          ${feature.properties.Commune}<br></p>
+          ad_hexaclé : ${feature.properties.imb_id}<br></p>
+          État : ${feature.properties.imb_etat}<br></p>
           Opérateurs d'infrastructures : ${feature.properties.op_infra}`
         )
         .addTo(map);
@@ -245,4 +245,5 @@
 </div>
 </body>
 </html>
+
 
