@@ -80,7 +80,7 @@
     if (!map.getSource('prises-commercialisables')) {
       map.addSource('prises-commercialisables', {
         type: 'vector',
-        url: 'mapbox://tonusername.tontilesetcommercialisable' // à adapter avec ta source vectorielle
+        url: 'mapbox://ballereau.3ro4yq88' // à adapter avec ta source vectorielle
       });
     }
     if (!map.getLayer('prises-commercialisables')) {
@@ -88,12 +88,12 @@
         id: 'prises-commercialisables',
         type: 'circle',
         source: 'prises-commercialisables',
-        'source-layer': 'nom_du_layer_dans_ton_tileset', // à adapter
+        'source-layer': 'Prises_commercialisables-dcem7s', // à adapter
         paint: {
-          'circle-radius': 5,
+          'circle-radius': 4,
           'circle-color': [
             'match',
-            ['get', 'statut'], // par exemple, un champ qui indique éligible ou non
+            ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
             'eligible', '#2ac537',
             'non-eligible', '#F79C0B',
             '#ccc'
@@ -105,7 +105,7 @@
     if (!map.getSource('prises-arcep')) {
       map.addSource('prises-arcep', {
         type: 'vector',
-        url: 'mapbox://tonusername.tontilesetarcep' // à adapter
+        url: 'mapbox://ballereau.aap4yt84' // à adapter
       });
     }
     if (!map.getLayer('prises-arcep')) {
@@ -113,10 +113,15 @@
         id: 'prises-arcep',
         type: 'circle',
         source: 'prises-arcep',
-        'source-layer': 'nom_du_layer_arcep', // à adapter
+        'source-layer': 'Prises_arcep-apqk9x', // à adapter
         paint: {
-          'circle-radius': 5,
-          'circle-color': '#FF0000' // par exemple rouge, tu peux adapter
+          'circle-color': [
+            'match',
+            ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
+            'eligible', '#2ac537',
+            'non-eligible', '#F79C0B',
+            '#ccc'
+          ]
         }
       });
     }
@@ -240,3 +245,4 @@
 </div>
 </body>
 </html>
+
