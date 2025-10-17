@@ -166,7 +166,7 @@
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
           `<strong>Informations sur le bâtiment :</strong><br>
-          ${feature.properties.Voie}<br>
+          ${feature.properties.Voie}<br>+'</p>'
           ${feature.properties.Commune}<br>
           Statut du bâtiment : ${feature.properties.EtatImmeuble}<br>
           ad_batcode : ${feature.properties.ad_batcode}<br>
@@ -246,5 +246,6 @@
 </div>
 </body>
 </html>
+
 
 
