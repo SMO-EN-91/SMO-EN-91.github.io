@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-16" />
@@ -82,21 +83,36 @@
         url: 'mapbox://ballereau.3ro4yq88' 
       });
     }
+
     if (!map.getLayer('prises-commercialisables')) {
       map.addLayer({
         id: 'prises-commercialisables',
         type: 'circle',
         source: 'prises-commercialisables',
-        'source-layer': 'Prises_commercialisables-dcem7s', // à adapter
+        'source-layer': 'Prises_commercialisables-dcem7s',
         paint: {
-          'circle-radius': 3,
+          'circle-radius': 3, // taille visible
           'circle-color': [
             'match',
-            ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
+            ['get', 'STATUT'],
             'ELIGIBLE', '#2ac537',
             'NON ELIGIBLE', '#F79C0B',
             '#ccc'
           ]
+        }
+      });
+    }
+
+    // Couche invisible "hitbox" pour améliorer la détection du pointeur
+    if (!map.getLayer('prises-commercialisables-hitbox')) {
+      map.addLayer({
+        id: 'prises-commercialisables-hitbox',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': 10,         // zone clic plus large
+          'circle-color': 'rgba(0,0,0,0)' // totalement invisible
         }
       });
     }
@@ -104,7 +120,7 @@
     if (!map.getSource('prises-arcep')) {
       map.addSource('prises-arcep', {
         type: 'vector',
-        url: 'mapbox://ballereau.aap4yt84' // à adapter
+        url: 'mapbox://ballereau.aap4yt84'
       });
     }
     if (!map.getLayer('prises-arcep')) {
@@ -112,12 +128,12 @@
         id: 'prises-arcep',
         type: 'circle',
         source: 'prises-arcep',
-        'source-layer': 'Prises_arcep-apqk9x', // à adapter
+        'source-layer': 'Prises_arcep-apqk9x',
         paint: {
           'circle-radius': 3,
           'circle-color': [
             'match',
-            ['get', 'STATUT'], // par exemple, un champ qui indique éligible ou non
+            ['get', 'STATUT'],
             'ELIGIBLE', '#2ac537',
             'NON ELIGIBLE', '#F79C0B',
             '#ccc'
@@ -126,11 +142,11 @@
       });
     }
 
-    // Idem pour les jalons (exemple pour 4jalon)
+    // Jalons, exemple pour 4jalon
     if (!map.getSource('4jalon')) {
       map.addSource('4jalon', {
         type: 'geojson',
-        data: 'https://tonurlversgeojson/4jalon.geojson' // ou url de ta source
+        data: 'https://tonurlversgeojson/4jalon.geojson'
       });
     }
     if (!map.getLayer('4jalon')) {
@@ -145,21 +161,18 @@
       });
     }
 
-    // Répéter pour 3jalon, 2jalon, jalon1 etc.
-
+    // Répéter pour autres jalons (3jalon, 2jalon, jalon1)
   }
 
-  // Ré-ajoute les sources et couches après chaque changement de style
   map.on('styledata', function() {
     addCustomSourcesAndLayers();
   });
 
-  // Initial load
   map.on('load', function() {
     addCustomSourcesAndLayers();
 
-    // Ajout des popups et interaction sur prises-commercialisables
-    map.on('click', 'prises-commercialisables', function(e) {
+    // Événements sur la couche invisible "hitbox"
+    map.on('click', 'prises-commercialisables-hitbox', function(e) {
       var feature = e.features[0];
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
@@ -187,10 +200,10 @@
         .addTo(map);
     });
 
-    map.on('mouseenter', 'prises-commercialisables', function() {
+    map.on('mouseenter', 'prises-commercialisables-hitbox', function() {
       map.getCanvas().style.cursor = 'pointer';
     });
-    map.on('mouseleave', 'prises-commercialisables', function() {
+    map.on('mouseleave', 'prises-commercialisables-hitbox', function() {
       map.getCanvas().style.cursor = '';
     });
 
@@ -217,7 +230,7 @@
       map.getCanvas().style.cursor = '';
     });
 
-    // Exemple popup pour jalons (à adapter pour chaque couche jalon)
+    // Popups jalons
     ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(function(layer) {
       map.on('click', layer, function(e) {
         var prop = e.features[0].properties;
@@ -245,8 +258,3 @@
 </div>
 </body>
 </html>
-
-
-
-
-
