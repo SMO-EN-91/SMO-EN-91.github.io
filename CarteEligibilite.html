@@ -246,21 +246,21 @@ map.on('click', 'prises-commercialisables-hitbox', function(e) {
       map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', '']);
     });
 
-    // === POPUPS PRISES ARCEP ===
-    map.on('click', 'prises-arcep-hitbox', function(e) {
-      const f = e.features[0];
-      new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(f.geometry.coordinates)
-        .setHTML(`
-          <strong>Informations sur le bâtiment :</strong><br>
-          ${f.properties.Voie}<br></p>
-          ${f.properties.Commune}<br></p>
-          ad_hexaclé : ${f.properties.imb_id}<br></p>
-          État : ${f.properties.imb_etat}<br></p>
-          Opérateurs d'infrastructures : ${f.properties.op_infra}
-        `)
-        .addTo(map);
-    });
+    // Popup prises-arcep
+map.on('click', 'prises-arcep', function(e) {
+  var feature = e.features[0];
+  new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      `<p><strong>Informations sur le bâtiment :</strong></p>
+      <p>${feature.properties.Voie}</p>
+      <p>${feature.properties.Commune}</p>
+      <p>ad_hexaclé : ${feature.properties.imb_id}</p>
+      <p>État : ${feature.properties.imb_etat}</p>
+      <p>Opérateurs d'infrastructures : ${feature.properties.op_infra}</p>`
+    )
+    .addTo(map);
+});
 
     // Surbrillance ARCEP
     map.on('mouseenter', 'prises-arcep-hitbox', e => {
@@ -294,6 +294,7 @@ map.on('click', 'prises-commercialisables-hitbox', function(e) {
 </div>
 </body>
 </html>
+
 
 
 
