@@ -213,14 +213,14 @@
         .setLngLat(f.geometry.coordinates)
         .setHTML(`
           <strong>Informations sur le bâtiment :</strong><br>
-          ${f.properties.Voie}<br>
-          ${f.properties.Commune}<br>
-          Statut du bâtiment : ${f.properties.EtatImmeuble}<br>
-          ad_batcode : ${f.properties.ad_batcode}<br>
-          ad_hexaclé : ${f.properties.ad_hexacle}<br>
-          Nom de la zone : ${f.properties.SRO}<br>
-          Nombre de fibres attribuées : ${f.properties.NbreFibresAttribuees}<br>
-          PBO référencé(s) : ${f.properties.PBO_REF}<br>
+          ${f.properties.Voie}<br></p>
+          ${f.properties.Commune}<br></p>
+          Statut du bâtiment : ${f.properties.EtatImmeuble}<br></p>
+          ad_batcode : ${f.properties.ad_batcode}<br></p>
+          ad_hexaclé : ${f.properties.ad_hexacle}<br></p>
+          Nom de la zone : ${f.properties.SRO}<br></p>
+          Nombre de fibres attribuées : ${f.properties.NbreFibresAttribuees}<br></p>
+          PBO référencé(s) : ${f.properties.PBO_REF}<br></p>
           Opérateurs disponibles :
           <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>,
           <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>,
@@ -252,10 +252,10 @@
         .setLngLat(f.geometry.coordinates)
         .setHTML(`
           <strong>Informations sur le bâtiment :</strong><br>
-          ${f.properties.Voie}<br>
-          ${f.properties.Commune}<br>
-          ad_hexaclé : ${f.properties.imb_id}<br>
-          État : ${f.properties.imb_etat}<br>
+          ${f.properties.Voie}<br></p>
+          ${f.properties.Commune}<br></p>
+          ad_hexaclé : ${f.properties.imb_id}<br></p>
+          État : ${f.properties.imb_etat}<br></p>
           Opérateurs d'infrastructures : ${f.properties.op_infra}
         `)
         .addTo(map);
@@ -293,3 +293,4 @@
 </div>
 </body>
 </html>
+
