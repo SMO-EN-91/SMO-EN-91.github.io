@@ -1,98 +1,26 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="utf-16" />
 <title>Carte Eligibilité Essonne Numérique</title>
-
-<!-- ✅ Meta viewport optimisée pour Android et iOS -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-
-<!-- ✅ Mode plein écran Android/iOS -->
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0a3d62">
-<meta name="background-color" content="#0a3d62">
-
-<!-- Mapbox -->
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
-
 <style>
-  /* === Base === */
-  html, body {
-    margin: 0;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right)
-             env(safe-area-inset-bottom) env(safe-area-inset-left);
-    height: 100dvh; /* meilleure gestion Android */
-    overflow: hidden; /* évite les scrolls parasites */
-    box-sizing: border-box;
-  }
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
 
-  @supports not (height: 100dvh) {
-    html, body {
-      height: 100vh;
-    }
-  }
-
-  /* === Carte plein écran stable === */
-  #map {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100dvh;
-  }
-
-  @supports not (height: 100dvh) {
-    #map {
-      height: 100vh;
-    }
-  }
-
-  /* === Bloc sélection de fond de plan === */
-  #style-select-container {
-    position: fixed;
-    top: env(safe-area-inset-top, 10px);
-    left: env(safe-area-inset-left, 10px);
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    padding: 4px 6px;
-    height: 40px; /* même hauteur que la barre d’adresse */
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    gap: 6px;
-  }
-
-  #style-select-container label {
-    font-size: 14px;
-    font-weight: 500;
-    margin-right: 4px;
-  }
-
-  #style-select {
-    height: 30px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 4px 6px;
-    outline: none;
-  }
-
-  /* === Légende === */
   .legend2 {
     background-color: #fff;
-    border-radius: 6px;
-    bottom: env(safe-area-inset-bottom, 20px);
-    right: env(safe-area-inset-right, 10px);
+    border-radius: 3px;
+    bottom: 30px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    padding: 8px;
-    position: fixed;
+    padding: 5px;
+    position: absolute;
+    right: 10px;
     z-index: 10;
   }
-
   .legend2 h4 { margin: 0 0 10px; }
   .legend2 div span {
     border-radius: 50%;
@@ -101,31 +29,9 @@
     margin-right: 5px;
     width: 10px;
   }
-
-  /* === Harmonisation avec la barre Mapbox Geocoder === */
-  .mapboxgl-ctrl-geocoder {
-    min-width: 260px;
-    height: 40px; /* même hauteur que le sélecteur */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border-radius: 8px;
-    overflow: hidden;
-    font-size: 14px;
-  }
-
-  .mapboxgl-ctrl-geocoder--input {
-    height: 38px !important;
-    line-height: 38px !important;
-    font-size: 14px;
-  }
-
-  .mapboxgl-ctrl-geocoder--icon {
-    margin-top: 8px;
-  }
 </style>
 </head>
-
 <body>
-<!-- Plugins Mapbox -->
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
 <link
   rel="stylesheet"
@@ -135,8 +41,7 @@
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
-<!-- ✅ Conteneur fixe pour le sélecteur -->
-<div id="style-select-container">
+<div style="position: absolute; top: 10px; left: 10px; z-index: 20; background: white; padding: 5px; border-radius: 4px;">
   <label for="style-select">Choisir fond de plan : </label>
   <select id="style-select">
     <option value="mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89">Plan standard</option>
@@ -145,7 +50,6 @@
   </select>
 </div>
 
-<!-- Carte Mapbox -->
 <div id="map"></div>
 
 <script>
@@ -158,26 +62,29 @@
     zoom: 9.5
   });
 
-  // === Sélecteur de fond de plan ===
   document.getElementById('style-select').addEventListener('change', function() {
     map.setStyle(this.value);
   });
 
-  // === Barre de recherche d'adresse ===
+  // Geocoder
   map.addControl(new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     countries: 'fr',
     mapboxgl: mapboxgl
   }));
 
-  // === Couches personnalisées ===
+  // === FONCTION POUR CHARGER LES COUCHES ===
   function addCustomSourcesAndLayers() {
+
+    // === PRISES COMMERCIALISABLES ===
     if (!map.getSource('prises-commercialisables')) {
       map.addSource('prises-commercialisables', {
         type: 'vector',
         url: 'mapbox://ballereau.3ro4yq88'
       });
     }
+
+    // Couche visible
     if (!map.getLayer('prises-commercialisables')) {
       map.addLayer({
         id: 'prises-commercialisables',
@@ -196,11 +103,51 @@
         }
       });
     }
-    if (!map.getLayer('prises-arcep')) {
+
+    // Couche invisible dynamique pour clics
+    if (!map.getLayer('prises-commercialisables-hitbox')) {
+      map.addLayer({
+        id: 'prises-commercialisables-hitbox',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 8,
+            14, 4
+          ],
+          'circle-color': 'rgba(0,0,0,0)'
+        }
+      });
+    }
+
+    // Couche de surbrillance
+    if (!map.getLayer('prises-commercialisables-highlight')) {
+      map.addLayer({
+        id: 'prises-commercialisables-highlight',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': 8,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'ad_batcode', ''] // vide au départ
+      });
+    }
+
+    // === PRISES ARCEP ===
+    if (!map.getSource('prises-arcep')) {
       map.addSource('prises-arcep', {
         type: 'vector',
         url: 'mapbox://ballereau.aap4yt84'
       });
+    }
+
+    // Couche visible
+    if (!map.getLayer('prises-arcep')) {
       map.addLayer({
         id: 'prises-arcep',
         type: 'circle',
@@ -218,13 +165,127 @@
         }
       });
     }
+
+    // Couche invisible dynamique
+    if (!map.getLayer('prises-arcep-hitbox')) {
+      map.addLayer({
+        id: 'prises-arcep-hitbox',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
+        paint: {
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 8,
+            14, 4
+          ],
+          'circle-color': 'rgba(0,0,0,0)'
+        }
+      });
+    }
+
+    // Couche de surbrillance
+    if (!map.getLayer('prises-arcep-highlight')) {
+      map.addLayer({
+        id: 'prises-arcep-highlight',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
+        paint: {
+          'circle-radius': 8,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'imb_id', ''] // vide au départ
+      });
+    }
   }
 
   map.on('styledata', addCustomSourcesAndLayers);
-  map.on('load', addCustomSourcesAndLayers);
+
+  map.on('load', function() {
+    addCustomSourcesAndLayers();
+
+    // Popup prises-commercialisables-hitbox
+map.on('click', 'prises-commercialisables-hitbox', function(e) {
+  var feature = e.features[0];
+  new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      `<p><strong>Informations sur le bâtiment :</strong></p>
+      <p>${feature.properties.Voie}</p>
+      <p>${feature.properties.Commune}</p>
+      <p>Statut du bâtiment : ${feature.properties.EtatImmeuble}</p>
+      <p>ad_batcode : ${feature.properties.ad_batcode}</p>
+      <p>ad_hexaclé : ${feature.properties.ad_hexacle}</p>
+      <p>Nom de la zone : ${feature.properties.SRO}</p>
+      <p>Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}</p>
+      <p>PBO référencé(s) : ${feature.properties.PBO_REF}</p>
+      <p>Opérateurs disponibles : <br>
+        <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>, 
+        <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>, 
+        <a href="https://www.free.fr/freebox/carte-fibre-optique/" target="_blank">FREE</a>, 
+        <a href="https://www.k-net.fr/" target="_blank">K-NET</a>, 
+        <a href="https://www.nordnet.com/" target="_blank">NORDNET</a>, 
+        <a href="https://boutique.orange.fr/eligibilite" target="_blank">ORANGE</a>, 
+        <a href="https://www.ozone.net/" target="_blank">OZONE</a>, 
+        <a href="https://www.sfr.fr/" target="_blank">SFR</a>
+      </p>
+      <p>Plus d'infos sur les <a href="http://essonnenumerique.com/suis-je-eligible/operateurs-disponibles-2/" target="_blank">opérateurs disponibles</a></p>`
+    )
+    .addTo(map);
+});
+
+    // Surbrillance commerciale
+    map.on('mouseenter', 'prises-commercialisables-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', e.features[0].properties.ad_batcode]);
+    });
+    map.on('mouseleave', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', '']);
+    });
+
+    // Popup prises-arcep
+map.on('click', 'prises-arcep', function(e) {
+  var feature = e.features[0];
+  new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      `<p><strong>Informations sur le bâtiment :</strong></p>
+      <p>${feature.properties.Voie}</p>
+      <p>${feature.properties.Commune}</p>
+      <p>ad_hexaclé : ${feature.properties.imb_id}</p>
+      <p>État : ${feature.properties.imb_etat}</p>
+      <p>Opérateurs d'infrastructures : ${feature.properties.op_infra}</p>`
+    )
+    .addTo(map);
+});
+
+    // Surbrillance ARCEP
+    map.on('mouseenter', 'prises-arcep-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', e.features[0].properties.imb_id]);
+    });
+    map.on('mouseleave', 'prises-arcep-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', '']);
+    });
+
+    // === POPUPS JALONS ===
+    ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(layer => {
+      map.on('click', layer, e => {
+        const p = e.features[0].properties;
+        let html = `<strong>${layer.toUpperCase()}</strong><br>Nom de la zone : ${p.zs_r3_code || ''}`;
+        if (p.DATE_OUVERTURE) html += `<br>Date d'ouverture commerciale : ${p.DATE_OUVERTURE}`;
+        new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
+      });
+      map.on('mouseenter', layer, () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', layer, () => map.getCanvas().style.cursor = '');
+    });
+  });
 </script>
 
-<!-- ✅ Légende fixe et stable -->
 <div id="prises-commercialisables" class="legend2">
   Déploiement des bâtiments
   <div><span style="background-color: #2ac537"></span>éligible</div>
