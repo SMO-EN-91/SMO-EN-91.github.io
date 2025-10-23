@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="utf-16" />
 <title>Carte Eligibilité Essonne Numérique</title>
 
-<!-- ✅ Meilleur meta viewport pour Android et iOS -->
+<!-- ✅ Meta viewport optimisée pour Android et iOS -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 
+<!-- ✅ Mode plein écran Android/iOS -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a3d62">
+<meta name="background-color" content="#0a3d62">
+
+<!-- Mapbox -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
 
@@ -29,10 +36,10 @@
 
   /* === Carte plein écran stable === */
   #map {
-    position: fixed; /* stable même si la barre d’adresse bouge */
+    position: fixed;
     inset: 0;
     width: 100%;
-    height: 100dvh; /* s’adapte à la hauteur visible */
+    height: 100dvh;
   }
 
   @supports not (height: 100dvh) {
@@ -47,11 +54,30 @@
     top: env(safe-area-inset-top, 10px);
     left: env(safe-area-inset-left, 10px);
     z-index: 20;
-    background: white;
-    padding: 5px 8px;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 4px 6px;
+    height: 40px; /* même hauteur que la barre d’adresse */
     font-family: "Helvetica Neue", Arial, sans-serif;
+    gap: 6px;
+  }
+
+  #style-select-container label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+
+  #style-select {
+    height: 30px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 6px;
+    outline: none;
   }
 
   /* === Légende === */
@@ -75,10 +101,31 @@
     margin-right: 5px;
     width: 10px;
   }
+
+  /* === Harmonisation avec la barre Mapbox Geocoder === */
+  .mapboxgl-ctrl-geocoder {
+    min-width: 260px;
+    height: 40px; /* même hauteur que le sélecteur */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+
+  .mapboxgl-ctrl-geocoder--input {
+    height: 38px !important;
+    line-height: 38px !important;
+    font-size: 14px;
+  }
+
+  .mapboxgl-ctrl-geocoder--icon {
+    margin-top: 8px;
+  }
 </style>
 </head>
 
 <body>
+<!-- Plugins Mapbox -->
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
 <link
   rel="stylesheet"
@@ -111,16 +158,19 @@
     zoom: 9.5
   });
 
+  // === Sélecteur de fond de plan ===
   document.getElementById('style-select').addEventListener('change', function() {
     map.setStyle(this.value);
   });
 
+  // === Barre de recherche d'adresse ===
   map.addControl(new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     countries: 'fr',
     mapboxgl: mapboxgl
   }));
 
+  // === Couches personnalisées ===
   function addCustomSourcesAndLayers() {
     if (!map.getSource('prises-commercialisables')) {
       map.addSource('prises-commercialisables', {
@@ -146,40 +196,11 @@
         }
       });
     }
-    if (!map.getLayer('prises-commercialisables-hitbox')) {
-      map.addLayer({
-        id: 'prises-commercialisables-hitbox',
-        type: 'circle',
-        source: 'prises-commercialisables',
-        'source-layer': 'Prises_commercialisables-dcem7s',
-        paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 8, 14, 4],
-          'circle-color': 'rgba(0,0,0,0)'
-        }
-      });
-    }
-    if (!map.getLayer('prises-commercialisables-highlight')) {
-      map.addLayer({
-        id: 'prises-commercialisables-highlight',
-        type: 'circle',
-        source: 'prises-commercialisables',
-        'source-layer': 'Prises_commercialisables-dcem7s',
-        paint: {
-          'circle-radius': 8,
-          'circle-color': '#00ffff',
-          'circle-opacity': 0.4
-        },
-        filter: ['==', 'ad_batcode', '']
-      });
-    }
-
-    if (!map.getSource('prises-arcep')) {
+    if (!map.getLayer('prises-arcep')) {
       map.addSource('prises-arcep', {
         type: 'vector',
         url: 'mapbox://ballereau.aap4yt84'
       });
-    }
-    if (!map.getLayer('prises-arcep')) {
       map.addLayer({
         id: 'prises-arcep',
         type: 'circle',
@@ -197,39 +218,10 @@
         }
       });
     }
-    if (!map.getLayer('prises-arcep-hitbox')) {
-      map.addLayer({
-        id: 'prises-arcep-hitbox',
-        type: 'circle',
-        source: 'prises-arcep',
-        'source-layer': 'Prises_arcep-apqk9x',
-        paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 8, 14, 4],
-          'circle-color': 'rgba(0,0,0,0)'
-        }
-      });
-    }
-    if (!map.getLayer('prises-arcep-highlight')) {
-      map.addLayer({
-        id: 'prises-arcep-highlight',
-        type: 'circle',
-        source: 'prises-arcep',
-        'source-layer': 'Prises_arcep-apqk9x',
-        paint: {
-          'circle-radius': 8,
-          'circle-color': '#00ffff',
-          'circle-opacity': 0.4
-        },
-        filter: ['==', 'imb_id', '']
-      });
-    }
   }
 
   map.on('styledata', addCustomSourcesAndLayers);
-
-  map.on('load', function() {
-    addCustomSourcesAndLayers();
-  });
+  map.on('load', addCustomSourcesAndLayers);
 </script>
 
 <!-- ✅ Légende fixe et stable -->
