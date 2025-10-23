@@ -221,8 +221,15 @@
     .addTo(map);
 });
 
-    map.on('mouseenter', 'prises-commercialisables-hitbox', () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', 'prises-commercialisables-hitbox', () => map.getCanvas().style.cursor = '');
+       // Surbrillance commerciale
+    map.on('mouseenter', 'prises-commercialisables-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', e.features[0].properties.ad_batcode]);
+    });
+    map.on('mouseleave', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', '']);
+    });
 
     // === POPUPS PRISES ARCEP ===
     map.on('click', 'prises-arcep-hitbox', function(e) {
@@ -240,8 +247,15 @@
     .addTo(map);
 });
 
-    map.on('mouseenter', 'prises-arcep-hitbox', () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', 'prises-arcep-hitbox', () => map.getCanvas().style.cursor = '');
+  // Surbrillance ARCEP
+    map.on('mouseenter', 'prises-arcep-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', e.features[0].properties.imb_id]);
+    });
+    map.on('mouseleave', 'prises-arcep-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', '']);
+    });
 
     // === POPUPS JALONS ===
     ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(layer => {
@@ -265,4 +279,5 @@
 </div>
 </body>
 </html>
+
 
