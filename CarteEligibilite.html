@@ -55,14 +55,13 @@
 <script>
   mapboxgl.accessToken = 'pk.eyJ1IjoiYmFsbGVyZWF1IiwiYSI6ImNrOGZ5Z3M2MzA0dHAzZXBrcDQwbzN5YzIifQ.UpKvOA9C3E4M9bOoG7r1yg';
 
-  var map = new mapboxgl.Map({
+  const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89',
     center: [2.306518, 48.523618],
     zoom: 9.5
   });
 
-  // Sélecteur de style
   document.getElementById('style-select').addEventListener('change', function() {
     map.setStyle(this.value);
   });
@@ -76,6 +75,7 @@
 
   // === FONCTION POUR CHARGER LES COUCHES ===
   function addCustomSourcesAndLayers() {
+
     // === PRISES COMMERCIALISABLES ===
     if (!map.getSource('prises-commercialisables')) {
       map.addSource('prises-commercialisables', {
@@ -84,6 +84,7 @@
       });
     }
 
+    // Couche visible
     if (!map.getLayer('prises-commercialisables')) {
       map.addLayer({
         id: 'prises-commercialisables',
@@ -103,7 +104,7 @@
       });
     }
 
-    // Couche invisible dynamique
+    // Couche invisible dynamique pour clics
     if (!map.getLayer('prises-commercialisables-hitbox')) {
       map.addLayer({
         id: 'prises-commercialisables-hitbox',
@@ -113,11 +114,27 @@
         paint: {
           'circle-radius': [
             'interpolate', ['linear'], ['zoom'],
-            8, 8,   // petit rayon quand on est dézoomé
-            14, 4   // plus petit rayon en zoomant
+            8, 8,
+            14, 4
           ],
           'circle-color': 'rgba(0,0,0,0)'
         }
+      });
+    }
+
+    // Couche de surbrillance
+    if (!map.getLayer('prises-commercialisables-highlight')) {
+      map.addLayer({
+        id: 'prises-commercialisables-highlight',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': 8,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'ad_batcode', ''] // vide au départ
       });
     }
 
@@ -129,6 +146,7 @@
       });
     }
 
+    // Couche visible
     if (!map.getLayer('prises-arcep')) {
       map.addLayer({
         id: 'prises-arcep',
@@ -166,22 +184,19 @@
       });
     }
 
-    // === JALONS ===
-    if (!map.getSource('4jalon')) {
-      map.addSource('4jalon', {
-        type: 'geojson',
-        data: 'https://tonurlversgeojson/4jalon.geojson'
-      });
-    }
-    if (!map.getLayer('4jalon')) {
+    // Couche de surbrillance
+    if (!map.getLayer('prises-arcep-highlight')) {
       map.addLayer({
-        id: '4jalon',
-        type: 'fill',
-        source: '4jalon',
+        id: 'prises-arcep-highlight',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
         paint: {
-          'fill-color': '#888',
-          'fill-opacity': 0.4
-        }
+          'circle-radius': 8,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'imb_id', ''] // vide au départ
       });
     }
   }
@@ -193,7 +208,7 @@
 
     // === POPUPS PRISES COMMERCIALISABLES ===
     map.on('click', 'prises-commercialisables-hitbox', function(e) {
-      var f = e.features[0];
+      const f = e.features[0];
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(f.geometry.coordinates)
         .setHTML(`
@@ -219,12 +234,20 @@
         `)
         .addTo(map);
     });
-    map.on('mouseenter', 'prises-commercialisables-hitbox', () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', 'prises-commercialisables-hitbox', () => map.getCanvas().style.cursor = '');
+
+    // Surbrillance commerciale
+    map.on('mouseenter', 'prises-commercialisables-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', e.features[0].properties.ad_batcode]);
+    });
+    map.on('mouseleave', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', '']);
+    });
 
     // === POPUPS PRISES ARCEP ===
     map.on('click', 'prises-arcep-hitbox', function(e) {
-      var f = e.features[0];
+      const f = e.features[0];
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(f.geometry.coordinates)
         .setHTML(`
@@ -237,8 +260,16 @@
         `)
         .addTo(map);
     });
-    map.on('mouseenter', 'prises-arcep-hitbox', () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', 'prises-arcep-hitbox', () => map.getCanvas().style.cursor = '');
+
+    // Surbrillance ARCEP
+    map.on('mouseenter', 'prises-arcep-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', e.features[0].properties.imb_id]);
+    });
+    map.on('mouseleave', 'prises-arcep-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', '']);
+    });
 
     // === POPUPS JALONS ===
     ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(layer => {
