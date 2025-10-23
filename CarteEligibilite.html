@@ -212,15 +212,15 @@
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(f.geometry.coordinates)
         .setHTML(`
-          <strong>Informations sur le bâtiment :</strong><br>
-          ${f.properties.Voie}<br></p>
-          ${f.properties.Commune}<br></p>
-          Statut du bâtiment : ${f.properties.EtatImmeuble}<br></p>
-          ad_batcode : ${f.properties.ad_batcode}<br></p>
-          ad_hexaclé : ${f.properties.ad_hexacle}<br></p>
-          Nom de la zone : ${f.properties.SRO}<br></p>
-          Nombre de fibres attribuées : ${f.properties.NbreFibresAttribuees}<br></p>
-          PBO référencé(s) : ${f.properties.PBO_REF}<br></p>
+          <p><strong>Informations sur le bâtiment :</strong><br><p>
+          <p>${f.properties.Voie}<br></p>
+          <p>${f.properties.Commune}<br></p>
+          <p>Statut du bâtiment : ${f.properties.EtatImmeuble}<br></p>
+          <p>ad_batcode : ${f.properties.ad_batcode}<br></p>
+          <p>ad_hexaclé : ${f.properties.ad_hexacle}<br></p>
+          <p>Nom de la zone : ${f.properties.SRO}<br></p>
+          <p>Nombre de fibres attribuées : ${f.properties.NbreFibresAttribuees}<br></p>
+          <p>PBO référencé(s) : ${f.properties.PBO_REF}<br></p>
           Opérateurs disponibles :
           <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>,
           <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>,
@@ -293,4 +293,5 @@
 </div>
 </body>
 </html>
+
 
