@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset="utf-16" />
+<meta charset="utf-8" />
 <title>Carte Eligibilité Essonne Numérique</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css" rel="stylesheet" />
 <style>
-  body { margin: 0; padding: 0; }
-  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+  }
+  #map {
+    position: absolute;
+    top: 0; bottom: 0; width: 100%;
+  }
 
-  /* Conteneur sélecteur style */
+  /* Conteneur du sélecteur */
   #style-select-container {
     position: absolute;
     top: 10px;
@@ -21,67 +28,73 @@
     border-radius: 4px;
     width: 300px;
     box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 14px;
   }
 
-  /* Géocoder Mapbox */
+  /* Style du select */
+  #style-select {
+    width: 100%;
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  /* Geocoder */
   .mapboxgl-ctrl-geocoder {
     position: absolute !important;
     top: 10px !important;
-    left: 320px !important; /* placé à droite du sélecteur */
+    left: 320px !important;
     z-index: 20 !important;
     width: 300px !important;
     box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 14px;
   }
 
-  /* Responsive pour écrans <= 600px */
-  @media (max-width: 600px) {
-    #style-select-container {
-      top: 50px;
-      left: 10px;
-      width: calc(100% - 20px);
-      max-width: 300px;
-    }
-    .mapboxgl-ctrl-geocoder {
-      top: 10px !important;
-      left: 10px !important;
-      width: calc(100% - 20px) !important;
-      max-width: 300px !important;
-    }
-  }
-
+  /* Légende en bas à droite */
   .legend2 {
-    background-color: #fff;
-    border-radius: 3px;
+    position: absolute;
     bottom: 30px;
+    right: 10px;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 3px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    padding: 5px;
-    position: absolute;
-    right: 10px;
     z-index: 10;
   }
-  .legend2 h4 { margin: 0 0 10px; }
+  .legend2 strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+  .legend2 div {
+    margin-bottom: 4px;
+  }
   .legend2 div span {
-    border-radius: 50%;
     display: inline-block;
-    height: 10px;
+    width: 10px; height: 10px;
     margin-right: 5px;
-    width: 10px;
+    border-radius: 50%;
+  }
+
+  /* Responsive - sur mobile, barres côte à côte mais plus petites */
+  @media (max-width: 600px) {
+    #style-select-container {
+      width: 45vw;
+      left: 5vw;
+      top: 10px;
+    }
+    .mapboxgl-ctrl-geocoder {
+      width: 45vw !important;
+      left: calc(5vw + 48vw) !important;
+      top: 10px !important;
+    }
   }
 </style>
 </head>
 <body>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
-<link
-  rel="stylesheet"
-  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
-  type="text/css"
-/>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-
 <div id="style-select-container">
-  <label for="style-select">Choisir fond de plan : </label>
+  <label for="style-select">Choisir fond de plan :</label>
   <select id="style-select">
     <option value="mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89">Plan standard</option>
     <option value="mapbox://styles/mapbox/satellite-streets-v12">Satellite + rues</option>
@@ -91,40 +104,42 @@
 
 <div id="map"></div>
 
+<div class="legend2">
+  <strong>Déploiement des bâtiments</strong>
+  <div><span style="background-color: #2ac537"></span>éligible</div>
+  <div><span style="background-color: #F79C0B"></span>non éligible</div>
+  <small>Source: <a href="http://essonnenumerique.com/" target="_blank" rel="noopener noreferrer">Essonne Numérique</a></small>
+</div>
+
 <script>
   mapboxgl.accessToken = 'pk.eyJ1IjoiYmFsbGVyZWF1IiwiYSI6ImNrOGZ5Z3M2MzA0dHAzZXBrcDQwbzN5YzIifQ.UpKvOA9C3E4M9bOoG7r1yg';
 
-  var map = new mapboxgl.Map({
+  const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89',
     center: [2.306518, 48.523618],
     zoom: 9.5
   });
 
-  var styleSelect = document.getElementById('style-select');
-
-  styleSelect.addEventListener('change', function() {
-    map.setStyle(this.value);
+  const styleSelect = document.getElementById('style-select');
+  styleSelect.addEventListener('change', () => {
+    map.setStyle(styleSelect.value);
   });
 
-  // Ajouter le geocoder avec position absolute pour custom CSS
-  var geocoder = new MapboxGeocoder({
+  const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     countries: 'fr',
     mapboxgl: mapboxgl
   });
   map.addControl(geocoder);
 
-  // Le reste de ton code d’ajout de sources/couches & événements...
-
-  function addCustomSourcesAndLayers() {
+  function addSourcesAndLayers() {
     if (!map.getSource('prises-commercialisables')) {
       map.addSource('prises-commercialisables', {
         type: 'vector',
-        url: 'mapbox://ballereau.3ro4yq88' 
+        url: 'mapbox://ballereau.3ro4yq88'
       });
     }
-
     if (!map.getLayer('prises-commercialisables')) {
       map.addLayer({
         id: 'prises-commercialisables',
@@ -143,7 +158,6 @@
         }
       });
     }
-
     if (!map.getLayer('prises-commercialisables-hitbox')) {
       map.addLayer({
         id: 'prises-commercialisables-hitbox',
@@ -183,22 +197,66 @@
     }
   }
 
-  map.on('styledata', function() {
-    addCustomSourcesAndLayers();
-  });
+  map.on('styledata', addSourcesAndLayers);
 
-  map.on('load', function() {
-    addCustomSourcesAndLayers();
+  map.on('load', () => {
+    addSourcesAndLayers();
 
-    // Ta logique d’interactions (popups, curseurs, etc.) ici
+    // Popups et curseur pour prises-commercialisables-hitbox
+    map.on('click', 'prises-commercialisables-hitbox', e => {
+      const f = e.features[0];
+      new mapboxgl.Popup({ offset: [0, -15] })
+        .setLngLat(f.geometry.coordinates)
+        .setHTML(`
+          <strong>Informations sur le bâtiment :</strong><br>
+          ${f.properties.Voie}<br>
+          ${f.properties.Commune}<br>
+          Statut du bâtiment : ${f.properties.EtatImmeuble}<br>
+          ad_batcode : ${f.properties.ad_batcode}<br>
+          ad_hexaclé : ${f.properties.ad_hexacle}<br>
+          Nom de la zone : ${f.properties.SRO}<br>
+          Nombre de fibres attribuées : ${f.properties.NbreFibresAttribuees}<br>
+          PBO référencé(s) : ${f.properties.PBO_REF}<br>
+          Opérateurs disponibles : 
+          <a href="https://www.bouyguestelecom.fr/" target="_blank" rel="noopener noreferrer">BOUYGUES TELECOM</a>, 
+          <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank" rel="noopener noreferrer">CORIOLIS</a>, 
+          <a href="https://www.free.fr/freebox/carte-fibre-optique/" target="_blank" rel="noopener noreferrer">FREE</a>, 
+          <a href="https://www.k-net.fr/" target="_blank" rel="noopener noreferrer">K-NET</a>, 
+          <a href="https://www.nordnet.com/" target="_blank" rel="noopener noreferrer">NORDNET</a>, 
+          <a href="https://boutique.orange.fr/eligibilite" target="_blank" rel="noopener noreferrer">ORANGE</a>, 
+          <a href="https://www.ozone.net/" target="_blank" rel="noopener noreferrer">OZONE</a>, 
+          <a href="https://www.sfr.fr/" target="_blank" rel="noopener noreferrer">SFR</a><br>
+          Plus d'infos sur les <a href="http://essonnenumerique.com/suis-je-eligible/" target="_blank" rel="noopener noreferrer">conditions d’éligibilité</a>.
+        `)
+        .addTo(map);
+    });
+    map.on('mouseenter', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+    });
+
+    // Popups et curseur pour prises-arcep
+    map.on('click', 'prises-arcep', e => {
+      const f = e.features[0];
+      new mapboxgl.Popup({ offset: [0, -15] })
+        .setLngLat(f.geometry.coordinates)
+        .setHTML(`
+          <strong>Informations sur la prise ARCEP :</strong><br>
+          Adresse : ${f.properties.adresse}<br>
+          Commune : ${f.properties.commune}<br>
+          Statut : ${f.properties.statut}
+        `)
+        .addTo(map);
+    });
+    map.on('mouseenter', 'prises-arcep', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'prises-arcep', () => {
+      map.getCanvas().style.cursor = '';
+    });
   });
 </script>
-
-<div id="prises-commercialisables" class="legend2">
-  Déploiement des bâtiments
-  <div><span style="background-color: #2ac537"></span>éligible</div>
-  <div><span style="background-color: #F79C0B"></span>non éligible</div>
-  <small>Source: <a href="http://essonnenumerique.com/" target="_blank">Essonne Numérique</a></small>
-</div>
 </body>
 </html>
