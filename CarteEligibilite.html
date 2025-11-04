@@ -29,6 +29,18 @@
     margin-right: 5px;
     width: 10px;
   }
+
+  #streetview-btn {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    z-index: 20;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #999;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -49,6 +61,9 @@
     <option value="mapbox://styles/mapbox/satellite-v9">Satellite uniquement</option>
   </select>
 </div>
+
+<!-- Bouton global Street View -->
+<button id="streetview-btn">Street View au centre</button>
 
 <div id="map"></div>
 
@@ -72,6 +87,18 @@ map.addControl(new MapboxGeocoder({
   countries: 'fr',
   mapboxgl: mapboxgl
 }));
+
+// Fonction pour ouvrir Street View dans un nouvel onglet
+function openStreetView(lat, lng) {
+  const url = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lng}&cbp=11,0,0,0,0`;
+  window.open(url, '_blank');
+}
+
+// Bouton global Street View au centre de la carte
+document.getElementById('streetview-btn').addEventListener('click', () => {
+  const center = map.getCenter();
+  openStreetView(center.lat.toFixed(6), center.lng.toFixed(6));
+});
 
 // === FONCTION POUR CHARGER LES COUCHES ===
 function addCustomSourcesAndLayers() {
@@ -191,12 +218,6 @@ map.on('load', function() {
       .addTo(map);
   });
 });
-
-// Fonction pour ouvrir Street View dans un nouvel onglet
-function openStreetView(lat, lng) {
-  const url = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lng}&cbp=11,0,0,0,0`;
-  window.open(url, '_blank');
-}
 </script>
 
 <div id="prises-commercialisables" class="legend2">
