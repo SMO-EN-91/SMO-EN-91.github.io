@@ -29,18 +29,6 @@
     margin-right: 5px;
     width: 10px;
   }
-
-  #streetview-btn {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    z-index: 20;
-    background: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #999;
-    cursor: pointer;
-  }
 </style>
 </head>
 <body>
@@ -62,144 +50,178 @@
   </select>
 </div>
 
-<!-- Bouton global Street View -->
-<button id="streetview-btn">Street View au centre</button>
-
 <div id="map"></div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiYmFsbGVyZWF1IiwiYSI6ImNrOGZ5Z3M2MzA0dHAzZXBrcDQwbzN5YzIifQ.UpKvOA9C3E4M9bOoG7r1yg';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYmFsbGVyZWF1IiwiYSI6ImNrOGZ5Z3M2MzA0dHAzZXBrcDQwbzN5YzIifQ.UpKvOA9C3E4M9bOoG7r1yg';
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89',
-  center: [2.306518, 48.523618],
-  zoom: 9.5
-});
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/ballereau/ck7bzhy7q00fq1irwkzovmv89',
+    center: [2.306518, 48.523618],
+    zoom: 9.5
+  });
 
-document.getElementById('style-select').addEventListener('change', function() {
-  map.setStyle(this.value);
-});
+  document.getElementById('style-select').addEventListener('change', function() {
+    map.setStyle(this.value);
+  });
 
-// Geocoder
-map.addControl(new MapboxGeocoder({
-  accessToken: mapboxgl.accessToken,
-  countries: 'fr',
-  mapboxgl: mapboxgl
-}));
+  // Geocoder
+  map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    countries: 'fr',
+    mapboxgl: mapboxgl
+  }));
 
-// Fonction pour ouvrir Street View dans un nouvel onglet
-function openStreetView(lat, lng) {
-  const url = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lng}&cbp=11,0,0,0,0`;
-  window.open(url, '_blank');
-}
+  // === FONCTION POUR CHARGER LES COUCHES ===
+  function addCustomSourcesAndLayers() {
 
-// Bouton global Street View au centre de la carte
-document.getElementById('streetview-btn').addEventListener('click', () => {
-  const center = map.getCenter();
-  openStreetView(center.lat.toFixed(6), center.lng.toFixed(6));
-});
+    // === PRISES COMMERCIALISABLES ===
+    if (!map.getSource('prises-commercialisables')) {
+      map.addSource('prises-commercialisables', {
+        type: 'vector',
+        url: 'mapbox://ballereau.3ro4yq88'
+      });
+    }
 
-// === FONCTION POUR CHARGER LES COUCHES ===
-function addCustomSourcesAndLayers() {
-  if (!map.getSource('prises-commercialisables')) {
-    map.addSource('prises-commercialisables', { type: 'vector', url: 'mapbox://ballereau.3ro4yq88' });
+    // Couche visible
+    if (!map.getLayer('prises-commercialisables')) {
+      map.addLayer({
+        id: 'prises-commercialisables',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': 3,
+          'circle-color': [
+            'match',
+            ['get', 'STATUT'],
+            'ELIGIBLE', '#2ac537',
+            'NON ELIGIBLE', '#F79C0B',
+            '#ccc'
+          ]
+        }
+      });
+    }
+
+    // Couche invisible dynamique pour clics
+    if (!map.getLayer('prises-commercialisables-hitbox')) {
+      map.addLayer({
+        id: 'prises-commercialisables-hitbox',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 15,
+            14, 10
+          ],
+          'circle-color': 'rgba(0,0,0,0)'
+        }
+      });
+    }
+
+    // Couche de surbrillance
+    if (!map.getLayer('prises-commercialisables-highlight')) {
+      map.addLayer({
+        id: 'prises-commercialisables-highlight',
+        type: 'circle',
+        source: 'prises-commercialisables',
+        'source-layer': 'Prises_commercialisables-dcem7s',
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'ad_batcode', ''] // vide au départ
+      });
+    }
+
+    // === PRISES ARCEP ===
+    if (!map.getSource('prises-arcep')) {
+      map.addSource('prises-arcep', {
+        type: 'vector',
+        url: 'mapbox://ballereau.aap4yt84'
+      });
+    }
+
+    // Couche visible
+    if (!map.getLayer('prises-arcep')) {
+      map.addLayer({
+        id: 'prises-arcep',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
+        paint: {
+          'circle-radius': 3,
+          'circle-color': [
+            'match',
+            ['get', 'STATUT'],
+            'ELIGIBLE', '#2ac537',
+            'NON ELIGIBLE', '#F79C0B',
+            '#ccc'
+          ]
+        }
+      });
+    }
+
+    // Couche invisible dynamique
+    if (!map.getLayer('prises-arcep-hitbox')) {
+      map.addLayer({
+        id: 'prises-arcep-hitbox',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
+        paint: {
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, 15,
+            14, 10
+          ],
+          'circle-color': 'rgba(0,0,0,0)'
+        }
+      });
+    }
+
+    // Couche de surbrillance
+    if (!map.getLayer('prises-arcep-highlight')) {
+      map.addLayer({
+        id: 'prises-arcep-highlight',
+        type: 'circle',
+        source: 'prises-arcep',
+        'source-layer': 'Prises_arcep-apqk9x',
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#00ffff',
+          'circle-opacity': 0.4
+        },
+        filter: ['==', 'imb_id', ''] // vide au départ
+      });
+    }
   }
 
-  if (!map.getLayer('prises-commercialisables')) {
-    map.addLayer({
-      id: 'prises-commercialisables',
-      type: 'circle',
-      source: 'prises-commercialisables',
-      'source-layer': 'Prises_commercialisables-dcem7s',
-      paint: {
-        'circle-radius': 3,
-        'circle-color': ['match', ['get', 'STATUT'], 'ELIGIBLE', '#2ac537', 'NON ELIGIBLE', '#F79C0B', '#ccc']
-      }
-    });
-  }
+  map.on('styledata', addCustomSourcesAndLayers);
 
-  if (!map.getLayer('prises-commercialisables-hitbox')) {
-    map.addLayer({
-      id: 'prises-commercialisables-hitbox',
-      type: 'circle',
-      source: 'prises-commercialisables',
-      'source-layer': 'Prises_commercialisables-dcem7s',
-      paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 15, 14, 10], 'circle-color': 'rgba(0,0,0,0)' }
-    });
-  }
+  map.on('load', function() {
+    addCustomSourcesAndLayers();
 
-  if (!map.getLayer('prises-commercialisables-highlight')) {
-    map.addLayer({
-      id: 'prises-commercialisables-highlight',
-      type: 'circle',
-      source: 'prises-commercialisables',
-      'source-layer': 'Prises_commercialisables-dcem7s',
-      paint: { 'circle-radius': 10, 'circle-color': '#00ffff', 'circle-opacity': 0.4 },
-      filter: ['==', 'ad_batcode', '']
-    });
-  }
-
-  if (!map.getSource('prises-arcep')) {
-    map.addSource('prises-arcep', { type: 'vector', url: 'mapbox://ballereau.aap4yt84' });
-  }
-
-  if (!map.getLayer('prises-arcep')) {
-    map.addLayer({
-      id: 'prises-arcep',
-      type: 'circle',
-      source: 'prises-arcep',
-      'source-layer': 'Prises_arcep-apqk9x',
-      paint: { 'circle-radius': 3, 'circle-color': ['match', ['get', 'STATUT'], 'ELIGIBLE', '#2ac537', 'NON ELIGIBLE', '#F79C0B', '#ccc'] }
-    });
-  }
-
-  if (!map.getLayer('prises-arcep-hitbox')) {
-    map.addLayer({
-      id: 'prises-arcep-hitbox',
-      type: 'circle',
-      source: 'prises-arcep',
-      'source-layer': 'Prises_arcep-apqk9x',
-      paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 15, 14, 10], 'circle-color': 'rgba(0,0,0,0)' }
-    });
-  }
-
-  if (!map.getLayer('prises-arcep-highlight')) {
-    map.addLayer({
-      id: 'prises-arcep-highlight',
-      type: 'circle',
-      source: 'prises-arcep',
-      'source-layer': 'Prises_arcep-apqk9x',
-      paint: { 'circle-radius': 10, 'circle-color': '#00ffff', 'circle-opacity': 0.4 },
-      filter: ['==', 'imb_id', '']
-    });
-  }
-}
-
-map.on('styledata', addCustomSourcesAndLayers);
-
-map.on('load', function() {
-  addCustomSourcesAndLayers();
-
-  // Popup prises-commercialisables-hitbox
-  map.on('click', 'prises-commercialisables-hitbox', function(e) {
-    const feature = e.features[0];
-    const lat = feature.geometry.coordinates[1];
-    const lng = feature.geometry.coordinates[0];
-
-    new mapboxgl.Popup({ offset: [0, -15] })
-      .setLngLat(feature.geometry.coordinates)
-      .setHTML(`
-        <p><strong>Informations sur le bâtiment :</strong></p>
-        <p>${feature.properties.Voie}</p>
-        <p>${feature.properties.Commune}</p>
-        <p>Statut : ${feature.properties.EtatImmeuble}</p>
-        <p>ad_batcode : ${feature.properties.ad_batcode}</p>
-        <p>ad_hexaclé : ${feature.properties.ad_hexacle}</p>
-        <p>Nom de la zone : ${feature.properties.SRO}</p>
-        <p>Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}</p>
-        <p>PBO référencé(s) : ${feature.properties.PBO_REF}</p>
-        <p>Opérateurs disponibles : <br>
+    // Popup prises-commercialisables-hitbox
+map.on('click', 'prises-commercialisables-hitbox', function(e) {
+  var feature = e.features[0];
+  new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      `<p><strong>Informations sur le bâtiment :</strong></p>
+      <p>${feature.properties.Voie}</p>
+      <p>${feature.properties.Commune}</p>
+      <p>Statut du bâtiment : ${feature.properties.EtatImmeuble}</p>
+      <p>ad_batcode : ${feature.properties.ad_batcode}</p>
+      <p>ad_hexaclé : ${feature.properties.ad_hexacle}</p>
+      <p>Nom de la zone : ${feature.properties.SRO}</p>
+      <p>Nombre de fibres attribuées : ${feature.properties.NbreFibresAttribuees}</p>
+      <p>PBO référencé(s) : ${feature.properties.PBO_REF}</p>
+      <p>Opérateurs disponibles : <br>
         <a href="https://www.bouyguestelecom.fr/" target="_blank">BOUYGUES TELECOM</a>, 
         <a href="https://oldec.coriolis.com/forfait-internet/" target="_blank">CORIOLIS</a>, 
         <a href="https://www.free.fr/freebox/carte-fibre-optique/" target="_blank">FREE</a>, 
@@ -210,32 +232,58 @@ map.on('load', function() {
         <a href="https://www.sfr.fr/" target="_blank">SFR</a>
       </p>
       <p>Plus d'infos sur les <a href="http://essonnenumerique.com/suis-je-eligible/operateurs-disponibles-2/" target="_blank">opérateurs disponibles</a></p>`
-
-        <button onclick="openStreetView(${lat}, ${lng})">Ouvrir Street View ici</button>
-      `)
-      .addTo(map);
-  });
-
-  // Popup prises-arcep
-  map.on('click', 'prises-arcep', function(e) {
-    const feature = e.features[0];
-    const lat = feature.geometry.coordinates[1];
-    const lng = feature.geometry.coordinates[0];
-
-    new mapboxgl.Popup({ offset: [0, -15] })
-      .setLngLat(feature.geometry.coordinates)
-      .setHTML(`
-        <p><strong>Informations sur le bâtiment :</strong></p>
-        <p>${feature.properties.Voie}</p>
-        <p>${feature.properties.Commune}</p>
-        <p>État : ${feature.properties.imb_etat}</p>
-        <p>État : ${feature.properties.imb_etat}</p>
-        <p>Opérateurs d'infrastructures : ${feature.properties.op_infra}</p>`
-        <button onclick="openStreetView(${lat}, ${lng})">Ouvrir Street View ici</button>
-      `)
-      .addTo(map);
-  });
+    )
+    .addTo(map);
 });
+
+    // Surbrillance commerciale
+    map.on('mouseenter', 'prises-commercialisables-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', e.features[0].properties.ad_batcode]);
+    });
+    map.on('mouseleave', 'prises-commercialisables-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-commercialisables-highlight', ['==', 'ad_batcode', '']);
+    });
+
+    // Popup prises-arcep
+map.on('click', 'prises-arcep', function(e) {
+  var feature = e.features[0];
+  new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      `<p><strong>Informations sur le bâtiment :</strong></p>
+      <p>${feature.properties.Voie}</p>
+      <p>${feature.properties.Commune}</p>
+      <p>ad_hexaclé : ${feature.properties.imb_id}</p>
+      <p>État : ${feature.properties.imb_etat}</p>
+      <p>Opérateurs d'infrastructures : ${feature.properties.op_infra}</p>`
+    )
+    .addTo(map);
+});
+
+    // Surbrillance ARCEP
+    map.on('mouseenter', 'prises-arcep-hitbox', e => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', e.features[0].properties.imb_id]);
+    });
+    map.on('mouseleave', 'prises-arcep-hitbox', () => {
+      map.getCanvas().style.cursor = '';
+      map.setFilter('prises-arcep-highlight', ['==', 'imb_id', '']);
+    });
+
+    // === POPUPS JALONS ===
+    ['4jalon', '3jalon', '2jalon', 'jalon1'].forEach(layer => {
+      map.on('click', layer, e => {
+        const p = e.features[0].properties;
+        let html = `<strong>${layer.toUpperCase()}</strong><br>Nom de la zone : ${p.zs_r3_code || ''}`;
+        if (p.DATE_OUVERTURE) html += `<br>Date d'ouverture commerciale : ${p.DATE_OUVERTURE}`;
+        new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
+      });
+      map.on('mouseenter', layer, () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', layer, () => map.getCanvas().style.cursor = '');
+    });
+  });
 </script>
 
 <div id="prises-commercialisables" class="legend2">
@@ -246,4 +294,3 @@ map.on('load', function() {
 </div>
 </body>
 </html>
-
